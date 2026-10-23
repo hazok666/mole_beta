@@ -1488,7 +1488,7 @@ function menuAct(it, dir){
     if (dir && DEV){ startStage = ORDER[(posOf(startStage) + dir + unlocked + 1) % (unlocked + 1)]; store.set('moar-stage', startStage); refreshStageSel(); return; }
     startFromTitle('story'); return;
   }
-  if (id === 'turbo'){ if (turboOpen || DEV) startFromTitle('turbo'); else beep(150, 0.15, 'square', 0.04); return; }
+  if (id === 'turbo'){ if (turboOpen || DEV) startFromTitle('turbo'); else { beep(150, 0.15, 'square', 0.04); buzz('hit'); UI.lockT = S.anim + 2.2; } return; }
   if (id === 'endless'){ startFromTitle(id); return; }
   if (id === 'settings'){ openMenu('settings'); return; }
   if (id === 'credits'){ openMenu('credits'); return; }
@@ -1637,8 +1637,10 @@ function drawMenu(){
       spr('token' + (Math.floor(S.anim * 10) % 4), tx + 8, iy + 20);
       if (!title) spr('token' + (Math.floor(S.anim * 10 + 2) % 4), L.x + L.w - 14, iy + 20);
     }
-    textO(it.label(), lx, iy + 2, 16, on ? (blink ? '#f5c542' : '#ffe07a') : '#f4f1ea', title ? 'left' : 'center');
+    const lockd = it.id === 'turbo' && !(turboOpen || DEV);
+    textO(it.label(), lx, iy + 2, 16, lockd ? (on ? '#b4aacd' : '#7a6f96') : on ? (blink ? '#f5c542' : '#ffe07a') : '#f4f1ea', title ? 'left' : 'center');
   });
+  if (title && UI.lockT > S.anim) textO('LOCKED · FINISH THE STORY TO UNLOCK TURBO', L.x, L.y - 16, 8, Math.floor(S.anim * 6) % 2 ? '#ff6a1f' : '#f4f1ea', 'left');
   if (UI.menu === 'settings' && (!ac || ac.state !== 'running')) textO('TAP ANYWHERE TO WAKE THE AUDIO', W / 2, L.y + UI.items.length * L.ih + 6, 8, '#ff6a1f', 'center');
 }
 function endMenuReady(){ return S && ((S.mode === 'over' && S.overT > 3.0) || (S.mode === 'clear' && S.clearT > 1.6) || (S.mode === 'ending' && S.endT > 9)); }
