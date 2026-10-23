@@ -1517,7 +1517,7 @@ function menuTap(x, y){
 function drawResults(kind, t){
   const r = S.result || { key: recKey(), score: S.score, prevBest: 0, prevToday: 0, best: 0, today: 0, ranked: !SET.assist };
   const showStars = gameMode === 'story' && kind !== 'over' && S.starsNow;
-  const pw = 380, ph = (kind === 'end' ? 186 : (kind === 'clear' ? 208 : 200)) + (showStars ? 30 : 0), bx = Math.round(W / 2 - pw / 2), by = Math.round(H / 2 - ph / 2) + 8;
+  const pw = 380, ph = (kind === 'end' ? 186 : (kind === 'clear' ? 208 : 200)) + (showStars ? 30 : 0), bx = Math.round(W / 2 - pw / 2), by = Math.round(H / 2 - ph / 2) + 8 + (kind === 'over' ? 14 : 0);
   const gold = kind === 'end';   // the finale: a gold plaque with a shine every 4 s
   const C = gold ? { sub: '#3a1c06', lab: '#5a3410', val: '#2a1406', hi: '#c8321f', on: '#fff6c0', off: '#a07a20', capOn: '#2a1406', capOff: '#8a6418' }
                  : { sub: '#f4f1ea', lab: '#a79dbe', val: '#f4f1ea', hi: '#f5c542', on: '#f5c542', off: '#4a3e5a', capOn: '#f4f1ea', capOff: '#6e6488' };
@@ -1604,7 +1604,7 @@ const CREDITS = [
   ['MOLE ON A ROLL', 'h'], ['A GAME BY ERIC FALK', 's'], ['IN DEVELOPMENT SINCE 1986', 's'], ['', ''],
   ['CONCEPT, GAME DESIGN & ART DIRECTION', 'h'], ['ERIC FALK', ''], ['', ''],
   ['CODE, DESIGN DOC & GAME SYSTEMS', 'h'], ['BUILT WITH CLAUDE BY ANTHROPIC', ''], ['', ''],
-  ['PIXEL ART', 'h'], ['GENERATED WITH PERPLEXITY', ''], ['PROTOTYPE ART · FINAL ART TO COME', 's'], ['', ''],
+  ['ART', 'h'], ['CREATED WITH GENERATIVE AI', ''], ['GOOGLE NANO BANANA 2 VIA', 's'], ['ADOBE FIREFLY & GOOGLE GEMINI', 's'], ['DIRECTED & CURATED BY ERIC FALK', 's'], ['', ''],
   ['MUSIC & SOUND', 'h'], ['ORIGINAL CHIPTUNE, SYNTHESISED IN CODE', ''], ['', ''],
   ['FONT', 'h'], ['SILKSCREEN BY JASON KOTTKE', ''], ['SIL OPEN FONT LICENSE 1.1', 's'], ['', ''],
   ['STARRING', 'h'], ['MOE THE MOLE', ''], ['OFFICER BISCUIT', ''], ['THE RATS OF THE LOWER EAST SIDE', 's'], ['IGGY · AS HIMSELF', ''], ['THE RACCOONS OF CENTRAL PARK', 's'], ['THE ANIMALS OF THE BRONX ZOO', 's'], ['', ''],
