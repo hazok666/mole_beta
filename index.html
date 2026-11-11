@@ -637,7 +637,7 @@ function newRun(stage, carry){
       if (st === ZOO){ S.forced.push({ x: L * 0.5, k: 'quietGorilla' }); [0.2, 0.38, 0.8].forEach(f => S.forced.push({ x: L * f, k: 'fountainZ' })); [0.27, 0.45, 0.66, 0.92].forEach(f => S.forced.push({ x: L * f, k: 'cartZ' })); [0.14, 0.33, 0.58, 0.74, 0.86].forEach(f => S.forced.push({ x: L * f, k: 'snakeZ' })); }
       EGG_AT.forEach(f => S.forced.push({ x: L * f, k: 'quiet' }));
       if (st === 0 || st === ROOF) S.forced.push({ x: L * 0.2, k: 'quietIggy' });
-      if (st === 0){ [0.33, 0.63].forEach(f => S.forced.push({ x: L * f, k: 'movers' })); S.forced.push({ x: L * 0.12, k: 'crew' }); }
+      if (st === 0){ [0.33, 0.63].forEach(f => S.forced.push({ x: L * f, k: 'movers' })); }
       if (st === ROOF){ [0.36, 0.76].forEach(f => { S.forced.push({ x: L * f - 300, k: 'painterZ' }); S.forced.push({ x: L * f, k: 'billboard' }); }); S.forced.push({ x: L * 0.26, k: 'sunM' }); S.forced.push({ x: L * 0.63, k: 'sunW' }); }
       if (ALBUM_ON) [0.12, 0.31, 0.47, 0.71, 0.9].forEach(f => S.forced.push({ x: L * f, k: 'photo' }));   // five Polaroids per stage, always
     }
@@ -896,7 +896,7 @@ Object.assign(CHUNKS, {
 });
 const LEVELS = [
   { name:'STREETS', goal:'REACH THE ZOO', len:30700, spd:[1.0, 0.8],
-    set:{ crew:0.5, hotdog:0.8, yuppie:0.9, calm:1, cone:1, hydrant:1, can:1, barricade:1, jersey:1, rats:1, pigeons:1, highPigeons:1, construction:1, vent:1, double:1, triple:0.6, pickup:1, manhole:1, trash:1.4, papers:0.9, goldrun:0.12 } },
+    set:{ calm:1, cone:1, hydrant:1, can:1, barricade:1, jersey:1, rats:1, pigeons:1, highPigeons:1, construction:1, vent:1, double:1, triple:0.6, pickup:1, manhole:1, trash:1.4, papers:0.9, goldrun:0.12 } },
   { name:'SUBWAY', goal:'CATCH THE LAST TRAIN', len:40000, spd:[1.2, 0.95], timer:80, clock:'TRAIN', late:'MISSED THE TRAIN',
     set:{ calm:0.6, wet:3, bench:1.4, bottle:1.2, banana:1.4, breaker:0.5, breakerW:0.5, can:1, barricade:0.8, rats:2, construction:1, double:1, triple:0.8, pickup:1, goldrun:0.12 } },
   { name:'TRAFFIC', goal:'REACH THE CEMETERY GATE', len:45000, spd:[1.3, 1.0],
@@ -904,7 +904,7 @@ const LEVELS = [
   { name:'ROOFTOPS', goal:'REACH THE GARDEN BY SUNRISE', len:50700, spd:[1.45, 1.1], timer:82, clock:'SUNRISE', late:'THE SUN CAME UP',
     set:{ calm:0.1, raccoons:1.6, antenna:1.3, gap:1.6, gap2:1.1, stepup:1.4, gapup:1.8, ventgap:1.3, flock:1.6, acunit:0.9, turbine:0.7, chimney:0.9, dishes:1.4, papers:2.4, hut:0.9, clothesline:1.4, highPigeons:0.8, vent:1.5, rats:1.6, bottle:1.2, roofmix:1.4, pickup:0.7, goldrun:0.12 } },
   { name:'CENTRAL PARK', goal:'CROSS THE PARK', len:42000, spd:[1.25, 0.98],
-    set:{ hotdog:0.8, calm:0.8, rats:1, raccoons:1.8, owls:1.3, bats:1.1, joggers:1.2, skaters:1, bench:1.2, trash:0.7, lake:1.8, pickup:0.8, goldrun:0.12 } },
+    set:{ calm:0.8, rats:1, raccoons:1.8, owls:1.3, bats:1.1, joggers:1.2, skaters:1, bench:1.2, trash:0.7, lake:1.8, pickup:0.8, goldrun:0.12 } },
   { name:'BRONX ZOO', goal:'CUT THROUGH BEFORE CLOSING', len:36000, spd:[1.1, 0.88],
     set:{ tourist:1.0, calm:0.9, monkeys:1.5, peacocks:1.5, flamingos:0.55, sealion:0.9, keeper:1.0, elephant:1.1, parrots:1.2, bench:0.7, trash:0.5, banana:0.5, rats:0.5, pickup:1, goldrun:0.12 } },
   { name:'GRAVEYARD', goal:'CLIMB TO THE ROOFS', len:42000, spd:[1.35, 1.04],
@@ -1299,7 +1299,7 @@ function step(){
     if (!overlap || OB[o.type].decor) continue;
     if (o.type === 'flock' && o.sit) continue;
     if (o.type === 'pizza'){ o.dead = true; S.eatT = 1.4; const before = m.sx; m.sx = Math.min(SXMAX, m.sx + 80); const gained = m.sx - before > 1; if (!gained) S.score += 100; popup(gained ? 'PIZZA! BISCUIT EATS' : 'PIZZA +100', o.x, o.y - 12, '#f2b33d'); sfx.power(); continue; }
-    if (o.type === 'polaroid'){ o.dead = true; S.polaroids++; RUNPH++; S.score += 250; S.flash = 0.16; const nw = albumAdd(S.stage, o.idx); popup(gameMode === 'story' ? 'PHOTO ' + S.polaroids + '/5' + (nw ? ' · NEW!' : '') : 'PHOTO!', o.x, o.y - 12, '#f4f1ea'); sfx.trick(); beep(2400, 0.05, 'square', 0.03, -1800); burst(o.x + 13, o.y + 13, '#fff6c0', 12, 160, 100); continue; }
+    if (o.type === 'polaroid'){ o.dead = true; S.polaroids++; RUNPH++; S.score += 250; S.flash = 0.16; const nw = albumAdd(S.stage, o.idx); if (gameMode === 'story' && o.idx !== undefined && o.idx < 5 && (nw || !SHOTS[S.stage + '_' + o.idx])) S.snapReq = { st: S.stage, i: o.idx, n: 5 }; popup(gameMode === 'story' ? 'PHOTO ' + S.polaroids + '/5' + (nw ? ' · NEW!' : '') : 'PHOTO!', o.x, o.y - 12, '#f4f1ea'); sfx.trick(); beep(2400, 0.05, 'square', 0.03, -1800); burst(o.x + 13, o.y + 13, '#fff6c0', 12, 160, 100); continue; }
     if (o.type === 'cassette'){ o.dead = true; S.mix = 8; popup('MIXTAPE MODE', o.x, o.y - 12, '#e8458b'); sfx.power(); continue; }
     if (o.hit) continue;
     if (OB[o.type].grind){ if (o.type === 'clothesline' || o.type === 'billboard' || m.grind === o) continue; if (m.y <= o.top + 1) continue;
@@ -1405,9 +1405,18 @@ function menuLayout(){
   const n = UI.items.length, title = S && S.mode === 'title', ih = title ? 26 : 30, w = title ? 330 : 380;
   return { x: title ? ((TOUCH && SET.lefty) ? 268 : 400) : Math.round(W / 2 - w / 2), y: title ? 128 : Math.round(H / 2 - n * ih / 2 + 16), w, ih, h0: title ? 44 : ih };
 }
-const ALBUM_ON = false;   // 1.1: the photo album is parked until it is reworked
+const ALBUM_ON = true;   // 1.1: the photo album is back: every Polaroid is a real snapshot of the run
 let RUNPH = 0;   // Polaroids found in this Story run
 const ALB = store.get('moar-album') || {};
+const SHOTS = store.get('moar-shots2') || {}, SHOTIMG = {};   // real snapshots: 'stage_idx' -> small JPEG data URL
+Object.keys(SHOTS).forEach(k => { const im = new Image(); im.src = SHOTS[k]; SHOTIMG[k] = im; });
+function takeShot(st, i){   // called mid-render, before particles / popups / HUD: crop the action around Moe
+  try {
+    const cw = 152, ch = 136, k0 = cv.width / W, sx = Math.max(0, Math.min(W - cw, Math.round(S.moe.sx - 76))), y0 = 170, [c, g] = mk(cw, ch);   // 1:1 game pixels, no resampling: crisp pixel art
+    g.imageSmoothingEnabled = false; g.drawImage(cv, Math.round(sx * k0), Math.round(y0 * k0), Math.round(cw * k0), Math.round(ch * k0), 0, 0, cw, ch);
+    const u = c.toDataURL('image/png'), k = st + '_' + i; SHOTS[k] = u; const im = new Image(); im.src = u; SHOTIMG[k] = im; store.set('moar-shots2', SHOTS);
+  } catch (e) {}
+}
 function albumAdd(st, i){ if (gameMode !== 'story' || i === undefined || i > 4) return false; const a = ALB[st] || (ALB[st] = [0, 0, 0, 0, 0]); const nw = !a[i]; a[i] = 1; store.set('moar-album', ALB); return nw; }
 function albCount(){ return LEVELS.reduce((n, _, i) => n + (ALB[i] || []).filter(Boolean).length, 0); }
 // ---------- local arcade high scores: a top 10 per mode, signed with three initials ----------
@@ -1478,6 +1487,12 @@ const PHOTO_SUBJ = { 0: ['moe_ride0', 'rat0', 'pizza', 'pigeon0', 'ufoL0'], 1: [
   2: ['p_cab', 'p_cop', 'tr_ball0', 'egg_car', 'gator3'], 3: ['flock0', 'p_antenna', 'rf_sunm0', 'hightop0', 'rf_bill'], 6: ['gy_tomb2', 'gy_zs0', 'gy_hand2', 'gy_ghost0', 'gy_vamp3'] };
 const PHOTOS = {};
 function photoImg(st, i, Z){   // a little snapshot of the stage's real art: its own sky and skyline behind one real sprite (Z: render scale; the album uses 3 and scales down, the zoom view 4)
+  const real = SHOTIMG[st + '_' + i];
+  if (real && real.complete && real.naturalWidth){
+    if (Z >= 2) return real;   // the zoom view draws it at an exact 2x
+    const tk = 'T' + st + '_' + i; if (PHOTOS[tk]) return PHOTOS[tk];   // thumbnail: halve twice (152 -> 76 -> 38), smooth average, cached
+    const [c1, g1] = mk(76, 68); g1.imageSmoothingEnabled = true; g1.imageSmoothingQuality = 'high'; g1.drawImage(real, 0, 0, 76, 68);
+    const [c2, g2] = mk(38, 34); g2.imageSmoothingEnabled = true; g2.imageSmoothingQuality = 'high'; g2.drawImage(c1, 0, 0, 38, 34); return (PHOTOS[tk] = c2); }
   Z = Z || 1; const key = st + '_' + i + '_' + Z; if (PHOTOS[key]) return PHOTOS[key];
   const [c, g] = mk(38 * Z, 34 * Z); g.scale(Z, Z); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high'; const img = o => o && (o.img || o);
   const sky = st === 0 ? IMG.sky_sunset : st === 1 ? null : st === 2 ? img(SPR.sky_night) : st === 3 ? IMG.sky_dawn : st === ZOO ? img(SPR.zfar) : st === GRAVE ? img(SPR.gy_sky) : img(SPR.pk_sky);
@@ -1502,10 +1517,10 @@ function drawAlbum(){
     const y = 48 + p * 50 * AS, got = ALB[id] || [];
     text((p + 1) + '. ' + LEVELS[id].name, 228, y + 18 * AS, 8, '#f4f1ea', 'right');
     for (let i = 0; i < 5; i++){
-      const x = 244 + i * 56, tilt = ((h1(id * 7 + i) % 7) - 3) * 0.02;
+      const x = 244 + i * 56, tilt = (SHOTIMG[id + '_' + i] ? 0 : ((h1(id * 7 + i) % 7) - 3) * 0.02);
       ctx.save(); ctx.translate(x + 22, y + 22 * AS); ctx.rotate(tilt); ctx.scale(AS, AS);
       R(-22, -23, 44, 46, got[i] ? '#f4f1ea' : '#3a3346'); R(-22, 22, 44, 1, '#120e1c');
-      if (got[i]){ ctx.imageSmoothingEnabled = true; ctx.drawImage(photoImg(id, i, 3), -19, -20, 38, 34); }
+      if (got[i]){ ctx.imageSmoothingEnabled = true; ctx.drawImage(photoImg(id, i, 1), -19, -20, 38, 34); }
       else { R(-19, -20, 38, 34, '#241e30'); text('?', 0, -9, 16, '#5a4a78', 'center'); }
       ctx.restore();
     }
@@ -1519,12 +1534,12 @@ function albumTap(px, py){   // tap a found photo to see it big; any tap closes 
   return false;
 }
 function drawZoom(){
-  const z = UI.zoom; if (!z) return; const k = 4, pw = 38 * k, ph = 34 * k, fw = pw + 24, fh = ph + 52, x = Math.round(W / 2 - fw / 2), y = Math.round(H / 2 - fh / 2) - 6;
+  const z = UI.zoom; if (!z) return; const realZ = SHOTIMG[z.id + '_' + z.i], isReal = !!(realZ && realZ.complete && realZ.naturalWidth), k = isReal ? 2 : 4, pw = (isReal ? 152 : 38) * k * (isReal ? 1 : 1), ph = (isReal ? 136 : 34) * k, fw = pw + (isReal ? 16 : 24), fh = ph + (isReal ? 34 : 52), pad = isReal ? 8 : 12, x = Math.round(W / 2 - fw / 2), y = isReal ? 6 : Math.round(H / 2 - fh / 2) - 6;
   R(0, 0, W, H, 'rgba(10,8,16,0.72)');
-  ctx.save(); ctx.translate(W / 2, y + fh / 2); ctx.rotate(-0.025); ctx.translate(-W / 2, -(y + fh / 2));
-  R(x + 4, y + 5, fw, fh, 'rgba(0,0,0,0.45)'); R(x, y, fw, fh, '#f4f1ea'); ctx.imageSmoothingEnabled = false; ctx.drawImage(photoImg(z.id, z.i, k), x + 12, y + 12, pw, ph);
-  text(LEVELS[z.id].name + ' · ' + (z.i + 1) + '/5', W / 2, y + ph + 26, 8, '#2a2438', 'center'); ctx.restore();
-  text('TAP OR ESC TO CLOSE', W / 2, H - SAFE_B - 50, 8, '#a79dbe', 'center');
+  ctx.save(); if (!isReal){ ctx.translate(W / 2, y + fh / 2); ctx.rotate(-0.025); ctx.translate(-W / 2, -(y + fh / 2)); }
+  R(x + 4, y + 5, fw, fh, 'rgba(0,0,0,0.45)'); R(x, y, fw, fh, '#f4f1ea'); ctx.imageSmoothingEnabled = false; ctx.drawImage(photoImg(z.id, z.i, 4), x + pad, y + pad, pw, ph);
+  text(LEVELS[z.id].name + ' · ' + (z.i + 1) + '/5', W / 2, y + ph + (isReal ? 17 : 26), 8, '#2a2438', 'center'); ctx.restore();
+  if (!isReal) text('TAP OR ESC TO CLOSE', W / 2, H - SAFE_B - 50, 8, '#a79dbe', 'center');
 }
 function startFromTitle(kind){
   TURBO = kind === 'turbo'; RUNPH = 0;
@@ -1539,7 +1554,7 @@ function startFromTitle(kind){
 function menuAct(it, dir){
   const id = it.id;
   if (id === 'story'){
-    if (dir && DEV){ startStage = ORDER[(posOf(startStage) + dir + unlocked + 1) % (unlocked + 1)]; store.set('moar-stage', startStage); refreshStageSel(); return; }
+    if (dir && DEV){ startStage = ORDER[(posOf(startStage) + dir + NST) % NST]; store.set('moar-stage', startStage); refreshStageSel(); return; }
     startFromTitle('story'); return;
   }
   if (id === 'turbo'){ if (turboOpen || DEV) startFromTitle('turbo'); else { beep(150, 0.15, 'square', 0.04); buzz('hit'); UI.lockT = S.anim + 2.2; } return; }
@@ -1691,7 +1706,10 @@ function drawMenu(){
     if (title && i === 0){   // v1.1: a big START button
       const bx = L.x, by = iy + 2, bw = L.w - 16, bh = L.h0 - 6, hot = on ? (blink ? '#f0287c' : '#d61e6c') : '#b3195d';
       R(bx, by, bw, bh, '#120e1c'); R(bx + 2, by + 2, bw - 4, bh - 4, hot); R(bx + 2, by + 2, bw - 4, 3, '#ff8cc0'); R(bx + 2, by + bh - 5, bw - 4, 3, '#6d1040');
-      if (DEV) textO(it.label(), bx + bw / 2, by + 12, 16, '#ffffff', 'center'); else textO('\u25B6 START', bx + bw / 2, by + 8, 24, '#ffffff', 'center');
+      if (DEV) textO(it.label(), bx + bw / 2, by + 12, 16, '#ffffff', 'center'); else { ctx.font = '24px Silkscreen, monospace'; const sw = Math.round(ctx.measureText('START').width), tw = 22 + 14 + sw, tx0 = Math.round(bx + bw / 2 - tw / 2), cy = by + Math.round(bh / 2);   // v1.1: triangle drawn in pixels (no font fallback glyph), text centred on the button
+        for (let k = 0; k < 11; k++){ R(tx0 + 2, cy - 11 + k * 2, 2 + Math.min(k, 10 - k) * 2, 2, '#120e1c'); R(tx0, cy - 12 + k * 2 + 0, 0, 0, '#fff'); }
+        for (let k = 0; k < 11; k++){ const wd = 2 + Math.min(k, 10 - k) * 2; R(tx0 + 4, cy - 10 + k * 2, wd, 2, '#ffffff'); }
+        textO('START', tx0 + 22 + 14, by + 8, 24, '#ffffff', 'left'); }
       const stars = LEVELS.reduce((a, _, j) => a + starsOf(j).filter(Boolean).length, 0);
       if (stars) text(stars + '/' + NST * 3 + ' STARS', bx + bw - 8, by + bh - 12, 8, '#ffd3e8', 'right');
       return;
@@ -2774,6 +2792,7 @@ function render(){
     }
   }
   ctx.restore();
+  if (S.snapReq && S.mode === 'play' && --S.snapReq.n <= 0){ takeShot(S.snapReq.st, S.snapReq.i); S.snapReq = null; }
   for (const p of S.parts){ ctx.globalAlpha = Math.max(0, 1 - p.t / p.life) * (p.sz ? 0.5 : 1); R(p.x - S.camX, p.y, p.sz || 2, p.sz || 2, p.color); }
   ctx.globalAlpha = 1;
   for (const p of S.popups){ ctx.globalAlpha = Math.max(0, 1 - p.t / 0.6); text(p.text, p.x - S.camX, p.y - p.t / 0.6 * 12, 8, p.color, 'center'); }
